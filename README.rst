@@ -1,4 +1,4 @@
-
+============
 pibooth-rfid
 ============
 
@@ -18,7 +18,7 @@ In config.py:
   comment DEVEL = 1
   Set PLUGIN_ROOT to the absolute plugin path.
   
-Here below the new configuration options available in the `pibooth`_ configuration.
+Below are the new configuration options available in the `pibooth`_ configuration.
 **The keys and their default values are automatically added to your configuration after first** `pibooth`_ **restart.**
 
 .. code-block:: ini
