@@ -1,11 +1,8 @@
 
-==============
 pibooth-rfid
-==============
+============
 
-|PythonVersions| |PypiPackage| |Downloads|
-
-``pibooth-rfid`` is a plugin for the `pibooth`_ application.
+``pibooth-rfid`` is a plugin for the `pibooth` application.
 
 It allows to read NFC tags in Choose screen
 
