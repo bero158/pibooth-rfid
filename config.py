@@ -4,7 +4,8 @@ PLUGIN_ROOT = '/home/pi/pibooth/pibooth-rfid/'
 
 
 if DEVEL:
-    PLUGIN_ROOT = './' 
+    import os
+    PLUGIN_ROOT = os.path.dirname(__file__) + '/' 
 DATA_ROOT = PLUGIN_ROOT + 'data/' 
 BTMIX_FILE_DEFAULT = DATA_ROOT + 'badges_db.json' #for photobooth
 BADGES_IMG_FOLDER = 'Badge Folder'

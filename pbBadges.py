@@ -40,7 +40,7 @@ class pbBadges:
                     self.attIds.append(id)
                     self.drawbadge.add(id)
     def addBadge(self,badge):
-        if badge:
+        if badge and self.btdb:
             badge_str = bytes(badge).hex().casefold()
             LOGGER.info(f"read badge - debounced: {badge_str}")
             found = next((bt for bt in self.btdb if bt["uid"].casefold() == badge_str), None )
