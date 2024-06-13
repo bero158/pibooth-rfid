@@ -2,7 +2,7 @@
 pibooth-rfid
 ============
 
-|PythonVersions| |PypiPackage| |Downloads|
+|PythonVersions| 
 
 ``pibooth-rfid`` is a plugin for the `pibooth` application.
 
