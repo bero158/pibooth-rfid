@@ -39,3 +39,11 @@ Below are the new configuration options available in the `pibooth`_ configuratio
 .. note:: Edit the configuration by running the command ``pibooth --config``.
 
 !!! Write sructure of badge_db.json !!!
+
+.. --- Links ------------------------------------------------------------------
+
+.. _`pibooth`: https://pypi.org/project/pibooth
+
+.. |PythonVersions| image:: https://img.shields.io/badge/python-3.6+-red.svg
+   :target: https://www.python.org/downloads
+   :alt: Python 3.6+
