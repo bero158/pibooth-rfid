@@ -9,8 +9,6 @@ It allows to read NFC tags in Choose screen
 Install
 -------
 
-::
-
     Clone this repository to your Raspberry Pi and set plugin path at ~/.config/pibooth/pibooth.cfg
 
 Configuration
