@@ -62,6 +62,17 @@ def state_finish_enter(cfg, app, win):
     """
 
 @pibooth.hookimpl
+def state_wait_enter(cfg, app, win):
+    """Actions performed when application enter in Choose state.
+
+    :param cfg: application configuration
+    :param app: application instance
+    :param win: graphical window instance
+    """
+    app.pbImgMetaData = {}
+    app.pbBadges.startAdding(win)
+
+@pibooth.hookimpl
 def state_wait_do(cfg, app, win, events):
     """Actions performed when application is in Wait state.
     This hook is called in a loop until the application can switch
@@ -72,6 +83,23 @@ def state_wait_do(cfg, app, win, events):
     :param win: graphical window instance
     :param events: pygame events generated since last call
     """
+    
+        
+
+@pibooth.hookimpl
+def state_wait_validate(cfg, app, win, events):
+    """Return the next state name if application can switch to it
+    else return None.
+
+    :param cfg: application configuration
+    :param app: application instance
+    :param win: graphical window instance
+    :param events: pygame events generated since last call
+    """
+    if app.pbBadges.do():
+        return "choose" #jump to choose state
+
+
 @pibooth.hookimpl
 def state_choose_enter(cfg, app, win):
     """Actions performed when application enter in Choose state.
@@ -80,9 +108,10 @@ def state_choose_enter(cfg, app, win):
     :param app: application instance
     :param win: graphical window instance
     """
-    app.pbImgMetaData = {}
-    app.pbBadges.startAdding(win)
-
+    app.pbBadges.redraw()
+    # app.pbImgMetaData = {}
+    # app.pbBadges.startAdding(win)
+ 
 
 @pibooth.hookimpl
 def state_choose_do(cfg, app, win, events):

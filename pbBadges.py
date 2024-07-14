@@ -1,6 +1,8 @@
 from drawbadge import DrawBadge
+from animation import Animation
 from pibooth.utils import LOGGER
 import json
+import pygame
 import time
 import config
 if config.DEVEL:
@@ -27,10 +29,15 @@ class pbBadges:
             LOGGER.error(f"File {btMixFile} doesn't exist!")
 
     def startAdding(self, win):
+        self.animation = Animation(win)
         self.drawbadge = DrawBadge( self.btdb, self.badgesImgFolder, self.badgesDefImg, win)
         self.reader = NtagReader()
         self.attIds = []
         self.deboucer = None
+        rfidSymbolRect = pygame.Rect(20,20,175,150)
+        win_rect = win.get_rect()
+        rfidSymbolRect.topright = win_rect.topright
+        self.animation.start(config.BADGES_RFID_GIF, rfidSymbolRect)
         LOGGER.debug("Badges Start")
 
     def add(self, id : int):
@@ -49,28 +56,33 @@ class pbBadges:
                     id = found["id"]
                     self.add(id)
                     LOGGER.debug(f"added badge: {badge_str}")
+                    return id
                 else:
                     LOGGER.error(f"(ignored) Nonexisting badge ID: {badge_str}")
             else:
                 LOGGER.error(f"(ignored) Nonexisting badge: {badge_str}")
     def do(self):
+        self.animation.animate(500)
         badge = self.reader.read_id_no_block()
         if badge:
             # LOGGER.debug(f"read badge: {bytes(badge).hex()}")
             self.errorCount = 0
             if ( not badge == self.deboucer ):
-                self.addBadge( badge )
-            self.deboucer = badge
+                self.deboucer = badge
+                return self.addBadge( badge )
         else: # badge = None
             if self.debouncer:
                 errorCount += 1
-                if errorCount > 2: #every second reading is an error so we're waiting for at least two invalid reading here.
+                if errorCount > 2: #every second reading goes wrong so we're waiting for at least two invalid reading here.
                     self.debouncer = None
 
+    def redraw(self):
+        self.drawbadge.redraw()
     def exitAdding(self):
         self.reader.Close()
         del self.drawbadge
         del self.reader
+        del self.animation
     
     def getIDs(self):
         meta = {}

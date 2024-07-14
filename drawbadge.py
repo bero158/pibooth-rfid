@@ -58,6 +58,10 @@ class DrawBadge:
             self.drawImg(imgPath, position , self.win)
        
 
+    def redraw(self):
+        for pos,id in enumerate(self.ids):
+            self.drawImgId(id, pos )
+            
     def add(self, id):
         if id not in self.ids:
             self.ids.append(id)
