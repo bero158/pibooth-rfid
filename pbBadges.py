@@ -61,8 +61,10 @@ class pbBadges:
                     LOGGER.error(f"(ignored) Nonexisting badge ID: {badge_str}")
             else:
                 LOGGER.error(f"(ignored) Nonexisting badge: {badge_str}")
-    def do(self):
-        self.animation.animate(500)
+    def do(self, showLogo = True):
+        if showLogo:
+            self.animation.animate(500)
+            
         badge = self.reader.read_id_no_block()
         if badge:
             # LOGGER.debug(f"read badge: {bytes(badge).hex()}")

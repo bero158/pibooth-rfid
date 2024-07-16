@@ -96,7 +96,12 @@ def state_wait_validate(cfg, app, win, events):
     :param win: graphical window instance
     :param events: pygame events generated since last call
     """
-    if app.pbBadges.do():
+    showLogo = True
+    if hasattr(app,"plugin_gallery"):
+            if app.plugin_gallery["active"]:
+                showLogo = False
+    
+    if app.pbBadges.do(showLogo):
         return "choose" #jump to choose state
 
 
@@ -124,6 +129,8 @@ def state_choose_do(cfg, app, win, events):
     :param win: graphical window instance
     :param events: pygame events generated since last call
     """
+        
+
     app.pbBadges.do()
 
 @pibooth.hookimpl
