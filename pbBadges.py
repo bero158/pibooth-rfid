@@ -40,12 +40,19 @@ class pbBadges:
         self.animation.start(config.BADGES_RFID_GIF, rfidSymbolRect)
         LOGGER.debug("Badges Start")
 
+    def led(self, stateOK : bool ):
+        if hasattr(self,"app") and hasattr(self.app, "pibooth_ledstrip"):
+                        self.app.pibooth_ledstrip.badge(stateOK)
+
     def add(self, id : int):
         if id:
             if id not in self.attIds:
                 if len(self.attIds) <= self.LIMIT_BADGES:
                     self.attIds.append(id)
                     self.drawbadge.add(id)
+                    self.led(True)
+
+    
     def addBadge(self,badge):
         if badge and self.btdb:
             badge_str = bytes(badge).hex().casefold()
@@ -56,11 +63,15 @@ class pbBadges:
                     id = found["id"]
                     self.add(id)
                     LOGGER.debug(f"added badge: {badge_str}")
+                    
                     return id
                 else:
                     LOGGER.error(f"(ignored) Nonexisting badge ID: {badge_str}")
+                    self.led(False)
             else:
                 LOGGER.error(f"(ignored) Nonexisting badge: {badge_str}")
+                self.led(False)
+
     def do(self, showLogo = True):
         if showLogo:
             self.animation.animate(500)

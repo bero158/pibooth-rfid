@@ -6,7 +6,7 @@ from pbBadges import pbBadges
 from pibooth.utils import LOGGER
 import config
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 hookspec = pluggy.HookspecMarker('pibooth')
 
 # --- Pibooth state-independent hooks ------------------------------------------
@@ -51,6 +51,7 @@ def pibooth_startup(cfg, app):
                             unescape(cfg.get(config.SECTION, config.BADGES_IMG_FOLDER )),
                             unescape(cfg.get(config.SECTION, config.BADGES_DEFAULT_IMG ))
                             )
+    app.pbBadges.app = app
 
 
 
@@ -71,6 +72,8 @@ def state_wait_enter(cfg, app, win):
     """
     app.pbImgMetaData = {}
     app.pbBadges.startAdding(win)
+    if hasattr(app, "pibooth_ledstrip"):
+        app.pibooth_ledstrip.useCard(True, False)
 
 @pibooth.hookimpl
 def state_wait_do(cfg, app, win, events):
@@ -114,9 +117,9 @@ def state_choose_enter(cfg, app, win):
     :param win: graphical window instance
     """
     app.pbBadges.redraw()
-    # app.pbImgMetaData = {}
-    # app.pbBadges.startAdding(win)
- 
+    if hasattr(app, "pibooth_ledstrip"):
+        app.pibooth_ledstrip.useCard(True, True)
+
 
 @pibooth.hookimpl
 def state_choose_do(cfg, app, win, events):
@@ -142,4 +145,6 @@ def state_choose_exit(cfg, app, win):
     :param win: graphical window instance
     """
     app.pbBadges.exitAdding()
+    if hasattr(app, "pibooth_ledstrip"):
+        app.pibooth_ledstrip.useCard(False)
 
