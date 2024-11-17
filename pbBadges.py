@@ -12,14 +12,17 @@ else:
 
 class pbBadges:
     LIMIT_BADGES = 5
-    attIds=[] # Attendee IDs
-    debouncer = None
+
     def __init__(self,btMixFile : str, badgesImgFolder : str, badgesDefImg : str):
-        self.btMixFile = btMixFile
-        self.badgesImgFolder = badgesImgFolder
-        self.attIds = []
+        self.btMixFile : str = btMixFile
+        self.badgesImgFolder : str = badgesImgFolder
+        self.attIds : list = []
         self.btdb = None
-        self.badgesDefImg = badgesDefImg
+        self.badgesDefImg : str = badgesDefImg
+        self.deboucer_expire : float = time.time() # expiration of the last debounced card
+        self.debouncer = None #last read ID
+        self.attIds : list = [] # Attendee IDs
+        self.ledAbuseExpire = time.time()
         try:
             with open(btMixFile, "r") as f:
                 btwrapper = json.load(f)
@@ -42,7 +45,10 @@ class pbBadges:
 
     def led(self, stateOK : bool ):
         if hasattr(self,"app") and hasattr(self.app, "pibooth_ledstrip"):
-                        self.app.pibooth_ledstrip.badge(stateOK)
+            if stateOK or self.ledAbuseExpire < time.time():
+                self.app.pibooth_ledstrip.badge(stateOK)
+                if not stateOK:
+                    self.ledAbuseExpire = time.time()+4
 
     def add(self, id : int):
         if id:
@@ -80,8 +86,9 @@ class pbBadges:
         if badge:
             # LOGGER.debug(f"read badge: {bytes(badge).hex()}")
             self.errorCount = 0
-            if ( not badge == self.deboucer ):
+            if ( (not (badge == self.deboucer)) or self.deboucer_expire < time.time()):
                 self.deboucer = badge
+                self.deboucer_expire = time.time()+4 #expire in the followinf 10s
                 return self.addBadge( badge )
         else: # badge = None
             if self.debouncer:
